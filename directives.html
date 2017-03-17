@@ -9,12 +9,22 @@
 	<script>
 		angular.module("exampleApp", [])
 		.controller("defaultCtrl", function($scope) {
+			
+			$scope.data = {};
+
 			$scope.todos =  [
 				{ action: "Get groceries", complete: false },
 				{ action: "Call plumber", complete: false },
 				{ action: "Buy running shoes", complete: true },
 				{ action: "Buy flowers", complete: false },
 				{ action: "Call family", complete: false }];
+			
+			$scope.viewFile = function() {
+				return $scope.showList ? "list.html" : "table.html";
+			}	
+			$scope.reportChange = function() {
+				console.log("Displayed content: " + $scope.viewFile());
+			}
 		});
 		
 	</script>
@@ -26,21 +36,32 @@
 <body>
 	<div id="todoPanel" class="panel" ng-controller="defaultCtrl">
 		<h3 class="panel-header">To Do List {{todos.length}}</h3>
-		<table class="table table-bordered table-hover">
-			
-			<tbody>
-				<tr ng-repeat-start="item in todos">
-					<td>This is item {{$index}}</td>
-				</tr>
-				<tr>
-					<td>The action is: {{item.action}}</td>
-				</tr>
-				<tr ng-repeat-end>
-					<td>Item {{$index}} is {{item.complete? '' : "not "}} complete</td>
+		
+		<div class="well">
+			<div class="radio" ng-repeat="button in ['None', 'Table', 'List']">
+				<label ng-cloak>
+					<input type="radio" ng-model="data.mode" value="{{button}}" ng-checked="$first"/>
+					{{button}}
+				</label>
+				
+			</div>
+		</div>
+		<div ng-switch on="data.mode" ng-cloak>
+			<div ng-switch-when="Table">
+				<ng-include src="'table.html'"></ng-include> 
+			</div>
+			<div ng-switch-when="List">
+				<ng-include src="'list.html'"></ng-include> 
+			</div>
+			<div ng-switch-default>
+				Select another option to display a layout
+			</div>
+		</div>
 
-				</tr>
-			</tbody>
-		</table>
+
+		<!--<div ng-include="viewFile()" onload="reportChange()"> -->
+			
+		</div>
 	</div>
 </body>
 </html>
