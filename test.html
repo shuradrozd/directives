@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="angular.js"></script>
+	<link href="bootstrap.css" rel="stylesheet" />	
+	<link href="bootstrap-theme.css" rel="stylesheet" />	
+	<style>
+		.odd {
+			background-color: lightcoral
+		}
+		.even {
+			background-color: lightgreen
+		}
+	</style>
+	<script>
+		angular.module("myApp", [])
+		.controller("myCtrl", function($scope){
+			$scope.data = [
+			{name: "Alex", salary: 1000},
+			{name: "Gleb", salary: 10000},
+			{name: "Alesia", salary: 5000}
+			];
+
+			$scope.sort = function(name) {
+				$scope.mysort = name;
+			}
+			
+		});
+	</script>
+</head>
+<body>
+	<div class="row well" ng-controller="myCtrl">
+		<table class="table">
+			<thead>
+				<th>#</th>	
+				<th ng-click="sort('name')">Name</th>
+				<th ng-click="sort('salary')">Salary</th>
+			</thead>
+			<tbody>
+			<tr ng-repeat="item in data | orderBy: mysort" ng-class="$odd ? 'odd' : 'even'" >
+					<td>{{$index + 1}}</td>
+					<td>{{item.name}}</td>
+					<td>{{item.salary | currency}}</td>
+				</tr>
+			</tbody>
+		</table>	
+	</div>
+	
+</body>
+</html>
