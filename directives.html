@@ -10,9 +10,7 @@
 		angular.module("exampleApp", [])
 		.controller("defaultCtrl", function($scope) {
 			
-			
-
-			$scope.todos =  [
+		$scope.todos =  [
 				{ action: "Get groceries", complete: false },
 				{ action: "Call plumber", complete: false },
 				{ action: "Buy running shoes", complete: true },
@@ -20,60 +18,55 @@
 				{ action: "Call family", complete: false }];
 			
 			
-			$scope.buttonNames = ["Red","Green","Blue"];
-			 $scope.data = {
-				rowColor: "Blue",
-				columnColor: "Green"
-			};
-			
-			$scope.handleEvent = function (e) {
-				console.log("Event type: " + e.type);
-				$scope.data.columnColor = e.type == "mouseover" ? "Green" : "Blue";
-			}
-		});
 		
+		$scope.add = function(newitem) {
+			$scope.todos.push({action: newitem.action +"(" +newitem.location + ")", complete:false });
+		} 
+		
+		});
+
 	</script>
 	<style>
-	tr.Red {background-color: lightcoral;}
-	tr.Green {background-color: lightgreen;}
-	tr.Blue {background-color: lightblue;}
+	
 	</style>
 </head>
 <body>
 	<div id="todoPanel" class="panel" ng-controller="defaultCtrl">
-		<h3 class="panel-header">To Do List {{todos.length}}</h3>
-		<div class="well">
-			<span ng-repeat="button in buttonNames">
-			<button class="btn btn-info" ng-click="data.rowColor = button">
-			{{button}}
-			</button>
+		<h3 class="panel-header">
+		To Do List
+			<span class="label label-info">
+				{{(todos | filter: {complete:'false'}).length}}
 			</span>
+		</h3>
+	<div class="row">
+		<div class="col-xs-6 well">
+			<label>Action</label>
+				<input type="text" ng-model="newitem.action" />
+			<label>Location</label>
+				<input type="text" ng-model="newitem.location" />	
+			<button class="btn btn-info" ng-click="add(newitem)">Add</button>	
 		</div>
-
-		<table class="table">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Action</th>
-					<th>Done</th>
-				</tr>
-			</thead>
-			
-				<tr ng-repeat="item in todos"   ng-class="data.rowColor"
-					ng-mouseover="handleEvent($event)"
-					ng-mouseout="handleEvent($event)">
-						
-					<td>{{$index + 1}}</td>
-					<td>{{item.action}}</td>
-					<td ng-class="data.columnColor">{{item.complete}}</td>
-	
-				</tr>
+		<div class="col-xs-6">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Action</th>
+						<th>Done</th>
+					</tr>
+				</thead>
+					<tr ng-repeat="item in todos">
+						<td>{{$index + 1}}</td>
+						<td>{{item.action}}</td>
+						<td>
+							<input type="checkbox" ng-model="item.complete">
+						</td>
+					</tr>
 				
-			
-		</table>
-
-
-		<!--<div ng-include="viewFile()" onload="reportChange()"> -->
+			</table> 		
+		</div>	
+	</div> 	
+		
 			
 	</div>
 </body>
